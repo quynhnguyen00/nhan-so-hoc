@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <title>Nhân Số Học</title>
 
-  <!-- KẾT NỐI SUPABASE -->
-  <!script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"><!/script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 
 <body>
@@ -13,69 +12,57 @@
 <h2>Tính số đường đời</h2>
 
 <input type="text" id="name" placeholder="Nhập tên">
-<input type="date" id="dob">
-<button onclick="calculate()">Tính</button>
+<input type="date" id="birthdate">
+
+<button onclick="saveData()">Lưu</button>
 
 <p id="result"></p>
 
 <script>
-// =======================
-// 1. KẾT NỐI DATABASE
-// =======================
-//const supabase = window.supabase.createClient(
-//  "https://ynpsvfzxwpnsedunxivh.supabase.co/rest/v1/",
-//  "postgresql://postgres.ynpsvfzxwpnsedunxivh:Quynh%401001...@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true"
-//);
+const SUPABASE_URL = "https://ynpsvfzxwpnsedunxivh.supabase.co";
+const SUPABASE_KEY = "postgresql://postgres:Quynh%401001...@db.ynpsvfzxwpnsedunxivh.supabase.co:5432/postgres";
 
-// =======================
-// 2. HÀM TÍNH TOÁN
-// =======================
-function reduceNumber(num) {
-  while (num > 9) {
-    num = num.toString().split('').reduce((a, b) => a + Number(b), 0);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Hàm tính số đường đời
+function calculateLifeNumber(date) {
+  let sum = date.replaceAll("-", "").split("").reduce((a, b) => a + Number(b), 0);
+
+  while (sum > 9) {
+    sum = sum.toString().split("").reduce((a, b) => a + Number(b), 0);
   }
-  return num;
+
+  return sum;
 }
 
-// =======================
-// 3. HÀM CHÍNH
-// =======================
-async function calculate() {
-
+// Hàm lưu dữ liệu
+async function saveData() {
   const name = document.getElementById("name").value;
-  const dob = document.getElementById("dob").value;
+  const birthdate = document.getElementById("birthdate").value;
 
-  if (!dob) {
-    alert("Vui lòng nhập ngày sinh");
+  if (!name || !birthdate) {
+    alert("Nhập đầy đủ thông tin");
     return;
   }
 
-  // tính toán
-  const digits = dob.replaceAll("-", "").split('');
-  const sum = digits.reduce((a, b) => a + Number(b), 0);
-  const result = reduceNumber(sum);
+  const lifeNumber = calculateLifeNumber(birthdate);
 
-  // hiển thị
-  document.getElementById("result").innerText = "Số của bạn: " + result;
-
-  // =======================
-  // 4. LƯU DATABASE
-  // =======================
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from("users")
     .insert([
       {
-        name: name || "User",
-        dob: dob,
-        result: result
+        name: name,
+        birthdate: birthdate,
+        life_number: lifeNumber
       }
     ]);
 
   if (error) {
-    console.error("Lỗi:", error);
-    alert("Lưu thất bại");
+    console.error(error);
+    document.getElementById("result").innerText = "❌ Lỗi lưu dữ liệu";
   } else {
-    console.log("Đã lưu:", data);
+    document.getElementById("result").innerText =
+      "✅ Đã lưu! Số đường đời: " + lifeNumber;
   }
 }
 </script>
