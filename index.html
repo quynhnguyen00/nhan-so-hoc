@@ -19,10 +19,13 @@
 <p id="result"></p>
 
 <script>
-const SUPABASE_URL = "https://ynpsvfzxwpnsedunxivh.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlucHN2Znp4d3Buc2VkdW54aXZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3Mzk2MTcsImV4cCI6MjA5MjMxNTYxN30.Urq4RMVupXmcqvbO2VSC8bSh0l-H21PBktXpEUk_8Aw";
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const { data, error } = await supabase
+  .from("users")
+  .select("*");
+
+console.log(data, error);
 
 // Hàm tính số đường đời
 function calculateLifeNumber(date) {
