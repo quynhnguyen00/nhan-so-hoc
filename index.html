@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <title>Nhân Số Học</title>
 </head>
 <body>
@@ -8,7 +9,12 @@
   <input type="date" id="dob">
   <button onclick="calculate()">Tính</button>
   <p id="result"></p>
-
+  <script>
+    const supabase = window.supabase.createClient(
+      "https://ynpsvfzxwpnsedunxivh.supabase.co/rest/v1/",
+      "sb_publishable_raq8PG317ikmFZUrc06-4A_O1jFeWMO"
+    );
+  </script>
   <script>
     function reduceNumber(num) {
       while (num > 9) {
