@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Nhân Số Học</title>
+</head>
+<body>
+  <h2>Tính số đường đời</h2>
+  <input type="date" id="dob">
+  <button onclick="calculate()">Tính</button>
+  <p id="result"></p>
+
+  <script>
+    function reduceNumber(num) {
+      while (num > 9) {
+        num = num.toString().split('').reduce((a, b) => a + Number(b), 0);
+      }
+      return num;
+    }
+
+    function calculate() {
+      const dob = document.getElementById("dob").value;
+      if (!dob) return;
+
+      const digits = dob.replaceAll("-", "").split('');
+      const sum = digits.reduce((a, b) => a + Number(b), 0);
+      const result = reduceNumber(sum);
+
+      document.getElementById("result").innerText = "Số của bạn: " + result;
+    }
+  </script>
+</body>
+</html>
