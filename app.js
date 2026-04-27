@@ -16,19 +16,16 @@ async function submitData() {
     // ...
     try {
         await saveToGoogleSheet(name, dob);
-        console.log("Lưu Google Sheet thành công");
 
         document.getElementById("result").innerHTML = `
-            <div class="p-4 bg-green-100 rounded">
-                ✅ Đã nhận thông tin của ${name}
+            <div class="p-4 bg-green-100 text-green-700 rounded">
+                ✅ Đã lưu thông tin thành công!
             </div>
         `;
     } catch (error) {
-        console.error("Lỗi:", error);
-
         document.getElementById("result").innerHTML = `
-            <div class="p-4 bg-red-100 rounded">
-                ❌ ${error.message}
+            <div class="p-4 bg-red-100 text-red-700 rounded">
+                ❌ Có lỗi xảy ra.
             </div>
         `;
     } finally {
