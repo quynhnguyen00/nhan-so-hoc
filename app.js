@@ -1,44 +1,49 @@
 // app.js
 
-function reduceNumber(num, allowMaster = false) {
-    while (num > 9) {
-        // Giữ lại các số Master
-        if (allowMaster && [11, 22, 33].includes(num)) {
-            return num;
-        }
-
-        num = num
+// ======================
+// Hàm rút gọn một số
+// ======================
+function reduceNumber(number, masterNumbers = [11, 22, 33]) {
+    while (number > 9 && !masterNumbers.includes(number)) {
+        number = number
             .toString()
-            .split("")
+            .split('')
             .reduce((sum, digit) => sum + Number(digit), 0);
     }
-
-    return num;
+    return number;
 }
 
+// ======================
+// Tính con số chủ đạo
+// ======================
 function calculateLifePath(dob) {
-    const [year, month, day] = dob.split("-").map(Number);
+    const [year, month, day] = dob.split('-').map(Number);
 
-    // Rút gọn từng phần
-    const reducedDay = reduceNumber(day, true);
-    const reducedMonth = reduceNumber(month, true);
-    const reducedYear = reduceNumber(year, true);
+    // Rút gọn ngày (giữ 11)
+    const reducedDay = reduceNumber(day, [11]);
 
-    // Tổng ban đầu
+    // Rút gọn tháng (1-10)
+    const reducedMonth = reduceNumber(month, []);
+
+    // Rút gọn năm (giữ 11,22,33)
+    const reducedYear = reduceNumber(year, [11, 22, 33]);
+
+    // Tổng cuối cùng
     const total = reducedDay + reducedMonth + reducedYear;
-
-    // Kết quả cuối
-    const lifePath = reduceNumber(total, true);
+    const finalNumber = reduceNumber(total, [11, 22, 33]);
 
     return {
         day: reducedDay,
         month: reducedMonth,
         year: reducedYear,
         total: total,
-        lifePath: lifePath
+        final: finalNumber
     };
 }
 
+// ======================
+// Xử lý nút tính toán
+// ======================
 async function submitData() {
     const name = document.getElementById("name").value.trim();
     const dob = document.getElementById("dob").value;
@@ -51,44 +56,40 @@ async function submitData() {
     document.getElementById("loading").classList.remove("hidden");
 
     try {
-        // Lưu dữ liệu vào Google Sheet
+        // Lưu Google Sheet
         await saveToGoogleSheet(name, dob);
 
-        // Tính con số chủ đạo
+        // Tính thần số học
         const result = calculateLifePath(dob);
 
         document.getElementById("result").innerHTML = `
-            <div class="bg-white border rounded-xl p-6 shadow mt-4">
-                <h2 class="text-2xl font-bold text-center mb-4">
-                    🔮 Kết quả Nhân Số Học
+            <div class="bg-white rounded-xl shadow-lg p-6 mt-5 border">
+                <h2 class="text-2xl font-bold text-center text-purple-600 mb-4">
+                    🔮 Kết Quả Nhân Số Học
                 </h2>
 
-                <p><strong>Họ tên:</strong> ${name}</p>
-                <p><strong>Ngày sinh:</strong> ${formatDate(dob)}</p>
+                <p class="mb-2"><strong>Họ tên:</strong> ${name}</p>
+                <p class="mb-2"><strong>Ngày sinh:</strong> ${formatDate(dob)}</p>
 
                 <hr class="my-4">
 
-                <p>Ngày: <strong>${result.day}</strong></p>
-                <p>Tháng: <strong>${result.month}</strong></p>
-                <p>Năm: <strong>${result.year}</strong></p>
+                <p>Ngày: ${result.day}</p>
+                <p>Tháng: ${result.month}</p>
+                <p>Năm: ${result.year}</p>
 
                 <hr class="my-4">
 
-                <p class="text-xl">
-                    Con số chủ đạo:
-                    <span class="font-bold text-blue-600">
-                        ${result.total}/${result.lifePath}
-                    </span>
+                <p class="text-xl font-bold text-center text-blue-600">
+                    Con số chủ đạo: ${result.total}/${result.final}
                 </p>
             </div>
         `;
-
     } catch (error) {
         console.error(error);
 
         document.getElementById("result").innerHTML = `
             <div class="p-4 bg-red-100 text-red-700 rounded">
-                ❌ Có lỗi xảy ra: ${error.message}
+                ❌ Có lỗi xảy ra khi xử lý dữ liệu.
             </div>
         `;
     } finally {
@@ -96,7 +97,10 @@ async function submitData() {
     }
 }
 
+// ======================
+// Định dạng ngày
+// ======================
 function formatDate(dateString) {
-    const [year, month, day] = dateString.split("-");
+    const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;
 }
