@@ -13,7 +13,7 @@ function reduceToSingleDigit(number) {
 
 // Hàm rút gọn năm (giữ lại 11, 22, 33 nếu có)
 function reduceYear(number) {
-    while (number > 9 && number !== 11 && number !== 22 && number !== 33) {
+    while (number > 10 && number !== 11 && number !== 22 && number !== 33) {
         number = number
             .toString()
             .split('')
