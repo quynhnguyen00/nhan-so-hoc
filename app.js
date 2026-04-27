@@ -14,6 +14,24 @@ async function submitData() {
 
     // Phần xử lý nhân số học của bạn
     // ...
+    try {
+        await saveToGoogleSheet(name, dob);
+        console.log("Lưu Google Sheet thành công");
 
-    document.getElementById("loading").classList.add("hidden");
+        document.getElementById("result").innerHTML = `
+            <div class="p-4 bg-green-100 rounded">
+                ✅ Đã nhận thông tin của ${name}
+            </div>
+        `;
+    } catch (error) {
+        console.error("Lỗi:", error);
+
+        document.getElementById("result").innerHTML = `
+            <div class="p-4 bg-red-100 rounded">
+                ❌ ${error.message}
+            </div>
+        `;
+    } finally {
+        document.getElementById("loading").classList.add("hidden");
+    }
 }
