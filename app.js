@@ -1,48 +1,44 @@
 // app.js
 
-// Hàm cộng các chữ số đến khi còn 1 số
-function reduceToSingleDigit(number) {
+// Rút gọn về 1-9
+function reduceSingleDigit(number) {
     while (number > 9) {
         number = number
             .toString()
-            .split('')
+            .split("")
             .reduce((sum, digit) => sum + Number(digit), 0);
     }
     return number;
 }
 
-// Hàm rút gọn năm (giữ lại 11, 22, 33 nếu có)
-function reduceYear(number) {
-    while (number > 10 && number !== 11 && number !== 22 && number !== 33) {
+// Rút gọn nhưng giữ lại 11, 22, 33
+function reduceMasterNumber(number) {
+    while (number > 9 && ![11, 22, 33].includes(number)) {
         number = number
             .toString()
-            .split('')
+            .split("")
             .reduce((sum, digit) => sum + Number(digit), 0);
     }
     return number;
 }
 
-// Hàm tính con số chủ đạo
+// Tính con số chủ đạo
 function calculateLifePath(dob) {
-    const [year, month, day] = dob.split('-').map(Number);
+    const [year, month, day] = dob.split("-").map(Number);
 
-    // Rút gọn từng phần
-    const reducedDay = reduceToSingleDigit(day);
-    const reducedMonth = reduceToSingleDigit(month);
-    const reducedYear = reduceYear(year);
+    const reducedDay = reduceSingleDigit(day);
+    const reducedMonth = reduceSingleDigit(month);
+    const reducedYear = reduceMasterNumber(year);
 
-    // Tổng ban đầu
     const total = reducedDay + reducedMonth + reducedYear;
-
-    // Rút gọn kết quả cuối
-    const finalNumber = reduceToSingleDigit(total);
+    const finalNumber = reduceMasterNumber(total);
 
     return {
         day: reducedDay,
         month: reducedMonth,
         year: reducedYear,
         total: total,
-        final: finalNumber
+        lifePath: finalNumber
     };
 }
 
@@ -58,20 +54,21 @@ async function submitData() {
     document.getElementById("loading").classList.remove("hidden");
 
     try {
-        // Lưu dữ liệu vào Google Sheet
-        await saveToGoogleSheet(name, dob);
-
         // Tính con số chủ đạo
         const result = calculateLifePath(dob);
 
+        // Lưu Google Sheet
+        await saveToGoogleSheet(name, dob);
+
+        // Hiển thị kết quả
         document.getElementById("result").innerHTML = `
-            <div class="p-5 bg-white border rounded-xl shadow">
-                <h2 class="text-xl font-bold text-center mb-4">
-                    🔮 Kết quả Nhân Số Học
+            <div class="p-6 bg-white rounded-2xl shadow mt-4">
+                <h2 class="text-2xl font-bold text-center text-purple-600 mb-4">
+                    🔮 Kết Quả Nhân Số Học
                 </h2>
 
-                <p><strong>Họ tên:</strong> ${name}</p>
-                <p><strong>Ngày sinh:</strong> ${new Date(dob).toLocaleDateString('vi-VN')}</p>
+                <p class="mb-2"><strong>Họ tên:</strong> ${name}</p>
+                <p class="mb-2"><strong>Ngày sinh:</strong> ${formatDate(dob)}</p>
 
                 <hr class="my-4">
 
@@ -79,14 +76,8 @@ async function submitData() {
                 <p>Tháng: ${result.month}</p>
                 <p>Năm: ${result.year}</p>
 
-                <hr class="my-4">
-
-                <p class="text-lg">
-                    Tổng: ${result.total}
-                </p>
-
-                <p class="text-2xl font-bold text-blue-600 mt-3 text-center">
-                    Con số chủ đạo: ${result.total}/${result.final}
+                <p class="mt-4 text-xl font-bold text-blue-600">
+                    Con số chủ đạo: ${result.lifePath}
                 </p>
             </div>
         `;
@@ -102,4 +93,10 @@ async function submitData() {
     } finally {
         document.getElementById("loading").classList.add("hidden");
     }
+}
+
+// Định dạng ngày dd/mm/yyyy
+function formatDate(dob) {
+    const [year, month, day] = dob.split("-");
+    return `${day}/${month}/${year}`;
 }
