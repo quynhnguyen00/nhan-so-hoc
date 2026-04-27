@@ -1,44 +1,41 @@
 // app.js
 
-// Rút gọn về 1-9
-function reduceSingleDigit(number) {
-    while (number > 9) {
-        number = number
+function reduceNumber(num, allowMaster = false) {
+    while (num > 9) {
+        // Giữ lại các số Master
+        if (allowMaster && [11, 22, 33].includes(num)) {
+            return num;
+        }
+
+        num = num
             .toString()
             .split("")
             .reduce((sum, digit) => sum + Number(digit), 0);
     }
-    return number;
+
+    return num;
 }
 
-// Rút gọn nhưng giữ lại 11, 22, 33
-function reduceMasterNumber(number) {
-    while (number > 9 && ![11, 22, 33].includes(number)) {
-        number = number
-            .toString()
-            .split("")
-            .reduce((sum, digit) => sum + Number(digit), 0);
-    }
-    return number;
-}
-
-// Tính con số chủ đạo
 function calculateLifePath(dob) {
     const [year, month, day] = dob.split("-").map(Number);
 
-    const reducedDay = reduceSingleDigit(day);
-    const reducedMonth = reduceSingleDigit(month);
-    const reducedYear = reduceMasterNumber(year);
+    // Rút gọn từng phần
+    const reducedDay = reduceNumber(day, true);
+    const reducedMonth = reduceNumber(month, true);
+    const reducedYear = reduceNumber(year, true);
 
+    // Tổng ban đầu
     const total = reducedDay + reducedMonth + reducedYear;
-    const finalNumber = reduceMasterNumber(total);
+
+    // Kết quả cuối
+    const lifePath = reduceNumber(total, true);
 
     return {
         day: reducedDay,
         month: reducedMonth,
         year: reducedYear,
         total: total,
-        lifePath: finalNumber
+        lifePath: lifePath
     };
 }
 
@@ -54,30 +51,34 @@ async function submitData() {
     document.getElementById("loading").classList.remove("hidden");
 
     try {
+        // Lưu dữ liệu vào Google Sheet
+        await saveToGoogleSheet(name, dob);
+
         // Tính con số chủ đạo
         const result = calculateLifePath(dob);
 
-        // Lưu Google Sheet
-        await saveToGoogleSheet(name, dob);
-
-        // Hiển thị kết quả
         document.getElementById("result").innerHTML = `
-            <div class="p-6 bg-white rounded-2xl shadow mt-4">
-                <h2 class="text-2xl font-bold text-center text-purple-600 mb-4">
-                    🔮 Kết Quả Nhân Số Học
+            <div class="bg-white border rounded-xl p-6 shadow mt-4">
+                <h2 class="text-2xl font-bold text-center mb-4">
+                    🔮 Kết quả Nhân Số Học
                 </h2>
 
-                <p class="mb-2"><strong>Họ tên:</strong> ${name}</p>
-                <p class="mb-2"><strong>Ngày sinh:</strong> ${formatDate(dob)}</p>
+                <p><strong>Họ tên:</strong> ${name}</p>
+                <p><strong>Ngày sinh:</strong> ${formatDate(dob)}</p>
 
                 <hr class="my-4">
 
-                <p>Ngày: ${result.day}</p>
-                <p>Tháng: ${result.month}</p>
-                <p>Năm: ${result.year}</p>
+                <p>Ngày: <strong>${result.day}</strong></p>
+                <p>Tháng: <strong>${result.month}</strong></p>
+                <p>Năm: <strong>${result.year}</strong></p>
 
-                <p class="mt-4 text-xl font-bold text-blue-600">
-                    Con số chủ đạo: ${result.lifePath}
+                <hr class="my-4">
+
+                <p class="text-xl">
+                    Con số chủ đạo:
+                    <span class="font-bold text-blue-600">
+                        ${result.total}/${result.lifePath}
+                    </span>
                 </p>
             </div>
         `;
@@ -95,8 +96,7 @@ async function submitData() {
     }
 }
 
-// Định dạng ngày dd/mm/yyyy
-function formatDate(dob) {
-    const [year, month, day] = dob.split("-");
+function formatDate(dateString) {
+    const [year, month, day] = dateString.split("-");
     return `${day}/${month}/${year}`;
 }
