@@ -10,7 +10,7 @@ async function submitData() {
     document.getElementById("loading").classList.remove("hidden");
 
     // Lưu log vào Google Sheet
-    saveToGoogleSheet(name, dob);
+    //saveToGoogleSheet(name, dob);
 
     // Phần xử lý nhân số học của bạn
     // ...
