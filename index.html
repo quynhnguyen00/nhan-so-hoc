@@ -1,145 +1,33 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nhân Số Học</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhân Số Học</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body class="bg-gray-100">
 
-<div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow">
-  <h1 class="text-2xl font-bold mb-4 text-center">🔮 Nhân Số Học</h1>
+    <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow">
+        <h1 class="text-2xl font-bold mb-4 text-center">
+            🔮 Nhân Số Học
+        </h1>
 
-  <input id="name" class="w-full border p-2 mb-3 rounded" placeholder="Họ tên">
-  <input id="dob" type="date" class="w-full border p-2 mb-3 rounded">
+        <input id="name" class="w-full border p-2 mb-3 rounded" placeholder="Họ tên">
 
-  <button onclick="submitData()" class="w-full bg-blue-500 text-white p-2 rounded">
-    Tính toán
-  </button>
+        <input id="dob" type="date" class="w-full border p-2 mb-3 rounded">
 
-  <div id="loading" class="text-center mt-3 hidden">⏳ Đang xử lý...</div>
+        <button onclick="submitData()" class="w-full bg-blue-500 text-white p-2 rounded">
+            Tính toán
+        </button>
 
-  <div id="result" class="mt-5"></div>
-</div>
-
-<script>
-// ===== CONFIG =====
-const API_URL = "https://script.google.com/macros/s/AKfycbx2pMc4w2QvsQ47TV7DOoJL_bUYRGgF6R6OOzRyvyOA-6bStaBnT5NttPUB9W7fD_65uA/exec";
-
-// ===== CORE =====
-const charMap = {
-A:1,J:1,S:1,B:2,K:2,T:2,C:3,L:3,U:3,D:4,M:4,V:4,
-E:5,N:5,W:5,F:6,O:6,X:6,G:7,P:7,Y:7,H:8,Q:8,Z:8,
-I:9,R:9
-};
-
-function reduceNumber(num){
-  while(num>9 && ![11,22,33].includes(num)){
-    num = num.toString().split("").reduce((a,b)=>a+ +b,0);
-  }
-  return num;
-}
-
-function removeVN(str){
-  return str.normalize("NFD")
-  .replace(/[\u0300-\u036f]/g,"")
-  .replace(/đ/g,"d").replace(/Đ/g,"D");
-}
-
-function lifePath(dob){
-  return reduceNumber(
-    dob.replaceAll("-","")
-    .split("").reduce((a,b)=>a+ +b,0)
-  );
-}
-
-function birthday(dob){
-  return reduceNumber(parseInt(dob.split("-")[2]));
-}
-
-function expression(name){
-  name = removeVN(name.toUpperCase());
-  let sum=0;
-  for(let c of name) if(charMap[c]) sum+=charMap[c];
-  return reduceNumber(sum);
-}
-
-function soul(name){
-  name = removeVN(name.toUpperCase());
-  let sum=0;
-  for(let c of name) if("AEIOU".includes(c)) sum+=charMap[c];
-  return reduceNumber(sum);
-}
-
-function personality(name){
-  name = removeVN(name.toUpperCase());
-  let sum=0;
-  for(let c of name)
-    if(charMap[c] && !"AEIOU".includes(c)) sum+=charMap[c];
-  return reduceNumber(sum);
-}
-
-function attitude(dob){
-  let [y,m,d]=dob.split("-");
-  return reduceNumber(+m + +d);
-}
-
-function maturity(life, exp){
-  return reduceNumber(life + exp);
-}
-
-// ===== MAIN =====
-async function submitData(){
-  const name = document.getElementById("name").value;
-  const dob = document.getElementById("dob").value;
-
-  if(!name || !dob){
-    alert("Nhập đủ thông tin");
-    return;
-  }
-
-  document.getElementById("loading").classList.remove("hidden");
-
-  const data = {
-    name,
-    dob,
-    life_path: lifePath(dob),
-    birthday: birthday(dob),
-    expression: expression(name),
-    soul: soul(name),
-    personality: personality(name),
-    attitude: attitude(dob)
-  };
-
-  data.maturity = maturity(data.life_path, data.expression);
-
-  // UI
-  document.getElementById("result").innerHTML = `
-    <div class="grid grid-cols-2 gap-2 text-center">
-      ${Object.entries(data).map(([k,v])=>`
-        <div class="bg-gray-100 p-2 rounded">
-          <b>${k}</b><br>${v}
+        <div id="loading" class="text-center mt-3 hidden">
+            ⏳ Đang xử lý...
         </div>
-      `).join("")}
+
+        <div id="result" class="mt-5"></div>
     </div>
-  `;
 
-  // SAVE
-  try{
-    await fetch(API_URL,{
-      method:"POST",
-      body: JSON.stringify(data)
-    });
-  }catch(e){
-    console.error(e);
-  }
-
-  document.getElementById("loading").classList.add("hidden");
-}
-</script>
-
+    <script src="app.js"></script>
 </body>
 </html>
