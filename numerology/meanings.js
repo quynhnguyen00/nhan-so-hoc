@@ -49,7 +49,7 @@ const lifePathMeanings = {
 };
 
 // ======================
-// Đọc hàm ý nghĩa con số
+// Hàm lấy ý nghĩa
 // ======================
 function getLifePathMeaning(number) {
     return lifePathMeanings[number] || {
