@@ -63,28 +63,46 @@ async function submitData() {
         const result = calculateLifePath(dob);
         const meaning = getLifePathMeaning(result.final);
         
-        document.getElementById("result").innerHTML = `
-            <div class="bg-white rounded-xl shadow-lg p-6 mt-5 border">
-                <h2 class="text-2xl font-bold text-center text-purple-600 mb-4">
-                    🔮 Kết Quả Nhân Số Học
-                </h2>
+		document.getElementById("result").innerHTML = `
+			<div class="bg-white rounded-2xl shadow-xl p-6 mt-6 border border-purple-100">
+				<h2 class="text-3xl font-bold text-center text-purple-600 mb-6">
+					🔮 Kết Quả Nhân Số Học
+				</h2>
 
-                <p class="mb-2"><strong>Họ tên:</strong> ${name}</p>
-                <p class="mb-2"><strong>Ngày sinh:</strong> ${formatDate(dob)}</p>
+				<div class="space-y-2 mb-6">
+					<p><strong>Họ tên:</strong> ${name}</p>
+					<p><strong>Ngày sinh:</strong> ${formatDate(dob)}</p>
+				</div>
 
-                <hr class="my-4">
+				<div class="bg-gray-50 rounded-xl p-4 mb-6">
+					<h3 class="font-bold text-lg mb-3">📌 Quá trình tính toán</h3>
+					<p>Ngày: ${result.day}</p>
+					<p>Tháng: ${result.month}</p>
+					<p>Năm: ${result.year}</p>
+					<p class="mt-3 font-semibold">
+						Tổng: ${result.total}
+					</p>
+				</div>
 
-                <p>Ngày: ${result.day}</p>
-                <p>Tháng: ${result.month}</p>
-                <p>Năm: ${result.year}</p>
+				<div class="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-xl p-6 text-center mb-6">
+					<h3 class="text-xl font-semibold mb-2">
+						Con Số Chủ Đạo
+					</h3>
+					<p class="text-5xl font-bold">
+						${meaning.title}
+					</p>
+				</div>
 
-                <hr class="my-4">
-
-                <p class="text-xl font-bold text-center text-blue-600">
-                    Con số chủ đạo: ${result.total}/${result.final}
-                </p>
-            </div>
-        `;
+				<div class="bg-yellow-50 border-l-4 border-yellow-400 p-5 rounded-lg">
+					<h3 class="text-xl font-bold mb-3 text-yellow-700">
+						✨ Ý Nghĩa
+					</h3>
+					<p class="text-gray-700 leading-relaxed">
+						${meaning.meaning}
+					</p>
+				</div>
+			</div>
+		`;	
     } catch (error) {
         console.error(error);
 
