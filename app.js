@@ -20,7 +20,7 @@ function calculateLifePath(dob) {
     const [year, month, day] = dob.split('-').map(Number);
 
     // Rút gọn ngày (giữ 11)
-    const reducedDay = reduceNumber(day, [11]);
+    const reducedDay = reduceNumber(day, [9]);
 
     // Rút gọn tháng (1-9)
     const reducedMonth = reduceNumber(month, [9]);
