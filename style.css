@@ -16,3 +16,31 @@ body::after {
     background: rgba(0, 0, 0, 0.35);
     z-index: -1;
 }
+
+<-- thêm vào mũi tên có và trống, 4 đỉnh cao đời người -->
+.container {
+    width: 400px;
+    margin: 50px auto;
+    background: rgba(255,255,255,0.85);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+input {
+    width: 100%;
+    margin: 8px 0;
+    padding: 8px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#result {
+    margin-top: 20px;
+}

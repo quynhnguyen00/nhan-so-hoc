@@ -8,7 +8,7 @@ async function submitData() {
     const loadingElement = document.getElementById("loading");
 
     if (!name || !dob) {
-        alert("Vui lòng nhập đầy đủ họ tên và ngày sinh!");
+        alert("🚫Vui lòng nhập đầy đủ họ tên và ngày sinh!🚫");
         return;
     }
 
@@ -23,6 +23,16 @@ async function submitData() {
         const soulUrge = calculateSoulUrge(name);
         const expression = calculateExpression(name);
         const birthday = calculateBirthdayNumber(dob);
+        // ======================
+        // 4 Đỉnh Cao
+        // ======================
+        const pinnacles = calculatePinnacles(dob);
+        
+        // ======================
+        // Ma trận & Mũi tên
+        // ======================
+        const matrix = buildMatrix(dob);
+        const arrows = calculateArrows(matrix);
 
         // Lấy ý nghĩa con số chủ đạo
         const lifePathMeaning = getLifePathMeaning(lifePath.final);
@@ -35,7 +45,11 @@ async function submitData() {
             soulUrge,
             expression,
             birthday,
-            lifePathMeaning
+            lifePathMeaning,
+            // ➕ thêm mới
+            pinnacles,
+            matrix,
+            arrows
         });
 
     } catch (error) {
@@ -65,6 +79,111 @@ function renderNumerologyResult(data) {
             ${renderUserInfo(data.name, data.dob)}
 
             ${renderNumbersGrid(data)}
+
+            ${renderMatrix(data.matrix)}
+
+            ${renderPinnacles(data.pinnacles)}
+
+            ${renderArrows(data.arrows)}
+
+        </div>
+    `;
+}
+
+// ======================
+// MA TRẬN 3x3 (HIGHLIGHT SỐ)
+// ======================
+function renderMatrix(matrix) {
+
+    const grid = [1,2,3,4,5,6,7,8,9];
+
+    return `
+        <div class="bg-white border rounded-2xl p-5 mb-6 shadow">
+
+            <h3 class="text-xl font-bold text-center mb-4 text-purple-700">
+                🔢 Ma Trận 3x3
+            </h3>
+
+            <div class="grid grid-cols-3 gap-3 text-center text-2xl font-bold">
+
+                ${grid.map(num => {
+
+                    const count = matrix[num];
+
+                    const active = count > 0;
+
+                    return `
+                        <div class="
+                            p-4 rounded-xl border
+                            ${active ? 'bg-purple-600 text-white shadow-lg' : 'bg-gray-100 text-gray-400'}
+                        ">
+                            <div>${num}</div>
+
+                            <div class="text-sm mt-1">
+                                ${active ? '×' + count : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join("")}
+
+            </div>
+
+        </div>
+    `;
+}
+
+// ======================
+// 4 ĐỈNH CAO
+// ======================
+function renderPinnacles(p) {
+    return `
+        <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-5 mb-6">
+            <h3 class="text-xl font-bold text-indigo-700 mb-3">
+                🔺 4 Đỉnh Cao
+            </h3>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                <div class="bg-white p-3 rounded-xl shadow">
+                    <p>Đỉnh 1</p>
+                    <strong>${p.p1}</strong>
+                </div>
+                <div class="bg-white p-3 rounded-xl shadow">
+                    <p>Đỉnh 2</p>
+                    <strong>${p.p2}</strong>
+                </div>
+                <div class="bg-white p-3 rounded-xl shadow">
+                    <p>Đỉnh 3</p>
+                    <strong>${p.p3}</strong>
+                </div>
+                <div class="bg-white p-3 rounded-xl shadow">
+                    <p>Đỉnh 4</p>
+                    <strong>${p.p4}</strong>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// ======================
+// MŨI TÊN
+// ======================
+function renderArrows(arrows) {
+    return `
+        <div class="bg-green-50 border border-green-200 rounded-2xl p-5 mb-6">
+
+            <h3 class="text-xl font-bold text-green-700 mb-3">
+                ➜ Mũi Tên Nhân Số Học
+            </h3>
+
+            <p class="text-gray-700">
+                <strong>Mũi tên mạnh:</strong><br>
+                ${arrows.strong.length ? arrows.strong.join(", ") : "Không có"}
+            </p>
+
+            <p class="text-gray-700 mt-3">
+                <strong>Mũi tên trống:</strong><br>
+                ${arrows.missing.join(", ")}
+            </p>
 
         </div>
     `;
@@ -221,16 +340,14 @@ function formatDate(dateString) {
 }
 
 // ======================
-// Viết hoa chữ cái đầu
+// Viết hoa chữ cái đầu (chuẩn tiếng Việt)
 // ======================
 function formatName(name) {
     return name
         .trim()
         .toLowerCase()
-        .split(/\s+/)
-        .map(word =>
-            word.charAt(0).toUpperCase() +
-            word.slice(1)
-        )
-        .join(' ');
+        .split(" ")
+        .filter(word => word.length > 0)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
 }
