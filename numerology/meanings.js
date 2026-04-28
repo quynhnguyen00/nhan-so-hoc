@@ -47,3 +47,13 @@ const lifePathMeanings = {
         meaning: "Được gọi là 'Số Vua', có khả năng hiện thực hóa những mục tiêu khổng lồ vì lợi ích nhân loại."
     }
 };
+
+// ======================
+// Đọc hàm ý nghĩa con số
+// ======================
+function getLifePathMeaning(number) {
+    return lifePathMeanings[number] || {
+        title: `Số ${number}`,
+        meaning: "Chưa có dữ liệu cho con số này."
+    };
+}
