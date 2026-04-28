@@ -1,23 +1,29 @@
 // ======================
 // Tạo ma trận Pythagoras, lấy mũi tên có và mũi tên trống
 // ======================
-function buildMatrix(digits) {
+function buildMatrix(dob) {
+    const digits = dob.replaceAll("-", "").split("").map(Number);
+
     let matrix = {
         1:0,2:0,3:0,
         4:0,5:0,6:0,
         7:0,8:0,9:0
     };
 
-    digits.forEach(d => {
-        if(matrix[d] !== undefined) {
-            matrix[d]++;
+    digits.forEach(n => {
+        if (matrix[n] !== undefined) {
+            matrix[n]++;
         }
     });
 
     return matrix;
 }
 
-function getArrows(matrix) {
+// ======================
+// Mũi tên logic
+// ======================
+
+function calculateArrows(matrix) {
 
     const arrows = {
         "1-2-3": "Trí tuệ",
@@ -30,21 +36,20 @@ function getArrows(matrix) {
         "3-5-7": "Nhạy bén"
     };
 
-    let result = {
-        strong: [],
-        missing: []
-    };
+    let strong = [];
+    let missing = [];
 
-    for(let key in arrows) {
+    for (let key in arrows) {
         let nums = key.split("-");
-        let hasAll = nums.every(n => matrix[n] > 0);
 
-        if(hasAll) {
-            result.strong.push(arrows[key]);
+        let ok = nums.every(n => matrix[n] > 0);
+
+        if (ok) {
+            strong.push(arrows[key]);
         } else {
-            result.missing.push(arrows[key]);
+            missing.push(arrows[key]);
         }
     }
 
-    return result;
+    return { strong, missing };
 }
