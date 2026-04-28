@@ -8,7 +8,7 @@ async function submitData() {
     const loadingElement = document.getElementById("loading");
 
     if (!name || !dob) {
-        alert("Vui lòng nhập đầy đủ họ tên và ngày sinh!");
+        alert("🚫Vui lòng nhập đầy đủ họ tên và ngày sinh!🚫");
         return;
     }
 
