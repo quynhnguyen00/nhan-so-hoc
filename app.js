@@ -225,6 +225,12 @@ function formatDate(dateString) {
 // ======================
 function formatName(name) {
     return name
+        .trim()
         .toLowerCase()
-        .replace(/\b\w/g, char => char.toUpperCase());
+        .split(/\s+/)
+        .map(word =>
+            word.charAt(0).toUpperCase() +
+            word.slice(1)
+        )
+        .join(' ');
 }
