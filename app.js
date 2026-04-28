@@ -61,7 +61,8 @@ async function submitData() {
 
         // Tính thần số học
         const result = calculateLifePath(dob);
-
+        const meaning = getLifePathMeaning(result.final);
+        
         document.getElementById("result").innerHTML = `
             <div class="bg-white rounded-xl shadow-lg p-6 mt-5 border">
                 <h2 class="text-2xl font-bold text-center text-purple-600 mb-4">
