@@ -43,20 +43,20 @@
                     >
                 </div>
 
-                <!-- Ngày sinh -->
+                <!-- Ngày sinh nhập tay -->
                 <div class="mb-6">
                     <label for="dob" class="block mb-2 font-semibold text-gray-700">
                         📅 Ngày tháng năm sinh
                     </label>
-                
+
                     <input
                         id="dob"
                         name="dob"
                         type="text"
                         inputmode="numeric"
                         maxlength="10"
-                        placeholder="dd/mm/yyyy"
                         autocomplete="bday"
+                        placeholder="dd/mm/yyyy"
                         required
                         class="w-full px-5 py-4 text-lg border-2 border-purple-200 rounded-2xl
                                focus:border-purple-500 focus:ring-4 focus:ring-purple-200
@@ -89,55 +89,32 @@
 
         </div>
     </div>
+
     <!-- Tự động thêm dấu / -->
     <script>
-    // ========================================
-    // Tự động thêm dấu "/" khi nhập ngày sinh
-    // Ví dụ: 12091989 -> 12/09/1989
-    // ========================================
-    document.getElementById("dob").addEventListener("input", function (e) {
-        let value = e.target.value.replace(/\D/g, "");
-    
-        if (value.length > 8) {
-            value = value.substring(0, 8);
-        }
-    
-        if (value.length >= 5) {
-            value = value.replace(
-                /^(\d{2})(\d{2})(\d{0,4}).*/,
-                "$1/$2/$3"
-            );
-        } else if (value.length >= 3) {
-            value = value.replace(
-                /^(\d{2})(\d{0,2}).*/,
-                "$1/$2"
-            );
-        }
-    
-        e.target.value = value;
-    });
-    
-    // ========================================
-    // Chuyển dd/mm/yyyy -> yyyy-mm-dd
-    // Dùng trước khi tính toán
-    // ========================================
-    function convertDateToISO(dateString) {
-        const parts = dateString.split("/");
-    
-        if (parts.length !== 3) {
-            return null;
-        }
-    
-        const [day, month, year] = parts;
-    
-        if (day.length !== 2 || month.length !== 2 || year.length !== 4) {
-            return null;
-        }
-    
-        return `${year}-${month}-${day}`;
-    }
+        document.getElementById("dob").addEventListener("input", function (e) {
+            let value = e.target.value.replace(/\D/g, "");
+
+            if (value.length > 8) {
+                value = value.substring(0, 8);
+            }
+
+            if (value.length >= 5) {
+                value = value.replace(
+                    /^(\d{2})(\d{2})(\d{0,4}).*/,
+                    "$1/$2/$3"
+                );
+            } else if (value.length >= 3) {
+                value = value.replace(
+                    /^(\d{2})(\d{0,2}).*/,
+                    "$1/$2"
+                );
+            }
+
+            e.target.value = value;
+        });
     </script>
-    
+
     <!-- Scripts -->
     <script src="numerology/utils.js"></script>
     <script src="numerology/life-path.js"></script>
