@@ -175,13 +175,3 @@ function formatName(name) {
         .toLowerCase()
         .replace(/\b\w/g, char => char.toUpperCase());
 }
-
-// ======================
-// Lấy ý nghĩa con số chủ đạo
-// ======================
-function getLifePathMeaning(number) {
-    return lifePathMeanings[number] || {
-        title: `Số ${number}`,
-        meaning: "Chưa có dữ liệu cho con số này."
-    };
-}
