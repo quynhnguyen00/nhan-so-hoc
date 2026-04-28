@@ -61,6 +61,7 @@ async function submitData() {
 
         // Tính thần số học
         const result = calculateLifePath(dob);
+		// Ý nghĩa từng con số
         const meaning = getLifePathMeaning(result.final);
         
 		document.getElementById("result").innerHTML = `
