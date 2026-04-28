@@ -4,32 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhân Số Học</title>
+
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
 
-    <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow">
-        <h1 class="text-2xl font-bold mb-4 text-center">
-            🔮 Thông tin của bạn
-        </h1>
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
 
-        <input id="name" class="w-full border p-2 mb-3 rounded" placeholder="Họ tên">
+    <div class="max-w-2xl mx-auto px-4 py-10">
+        <div class="bg-white rounded-3xl shadow-2xl p-8">
 
-        <input id="dob" type="date" class="w-full border p-2 mb-3 rounded">
+            <h1 class="text-4xl font-extrabold text-center text-purple-600 mb-2">
+                🔮 Nhân Số Học
+            </h1>
 
-        <button onclick="submitData()" class="w-full bg-blue-500 text-white p-2 rounded">
-            Tính toán
-        </button>
+            <p class="text-center text-gray-500 mb-8">
+                Khám phá các con số đặc biệt của bạn
+            </p>
 
-        <div id="loading" class="text-center mt-3 hidden">
-            ⏳ Đang xử lý...
+            <!-- FORM -->
+            <form onsubmit="event.preventDefault(); submitData();">
+
+                <!-- Họ tên -->
+                <div class="mb-6">
+                    <label for="name" class="block mb-2 font-semibold text-gray-700">
+                        👤 Họ và tên
+                    </label>
+
+                    <input
+                        id="name"
+                        type="text"
+                        required
+                        autocomplete="name"
+                        placeholder="Nhập họ tên đầy đủ"
+                        class="w-full px-5 py-4 text-lg border-2 border-purple-200 rounded-2xl
+                               focus:border-purple-500 focus:ring-4 focus:ring-purple-200
+                               outline-none transition"
+                    >
+                </div>
+
+                <!-- Ngày sinh -->
+                <div class="mb-6">
+                    <label for="dob" class="block mb-2 font-semibold text-gray-700">
+                        📅 Ngày tháng năm sinh
+                    </label>
+
+                    <input
+                        id="dob"
+                        name="dob"
+                        type="date"
+                        required
+                        lang="vi"
+                        min="1900-01-01"
+                        max="2099-12-31"
+                        class="w-full px-5 py-4 text-lg border-2 border-purple-200 rounded-2xl
+                               focus:border-purple-500 focus:ring-4 focus:ring-purple-200
+                               outline-none transition"
+                    >
+                </div>
+
+                <!-- Nút tính toán -->
+                <button
+                    type="submit"
+                    class="w-full bg-gradient-to-r from-purple-500 to-blue-500
+                           hover:from-purple-600 hover:to-blue-600
+                           text-white text-lg font-bold py-4 rounded-2xl
+                           shadow-lg hover:shadow-xl transition duration-300"
+                >
+                    ✨ Tính Toán Ngay
+                </button>
+            </form>
+
+            <!-- Loading -->
+            <div id="loading" class="hidden text-center mt-6">
+                <div class="inline-flex items-center gap-2 text-purple-600 font-semibold">
+                    <span class="animate-spin text-2xl">⏳</span>
+                    Đang phân tích...
+                </div>
+            </div>
+
+            <!-- Kết quả -->
+            <div id="result" class="mt-8"></div>
+
         </div>
-
-        <div id="result" class="mt-5"></div>
     </div>
-    
-    <!-- Lưu dữ liệu log vào Googlesheet -->
+
+    <!-- Scripts -->
     <script src="numerology/utils.js"></script>
     <script src="numerology/life-path.js"></script>
     <script src="numerology/soul-urge.js"></script>
@@ -38,5 +98,6 @@
     <script src="numerology/meanings.js"></script>
     <script src="save-log.js"></script>
     <script src="app.js"></script>
+
 </body>
 </html>
