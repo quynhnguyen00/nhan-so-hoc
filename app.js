@@ -71,7 +71,9 @@ async function submitData() {
 				</h2>
 
 				<div class="space-y-2 mb-6">
-					<p><strong>Họ tên:</strong> ${name}</p>
+					<p><strong>Họ tên:</strong> ${name
+					  .toLowerCase()
+					  .replace(/\b\w/g, char => char.toUpperCase())}</p>
 					<p><strong>Ngày sinh:</strong> ${formatDate(dob)}</p>
 				</div>
 
