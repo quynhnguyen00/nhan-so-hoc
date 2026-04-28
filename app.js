@@ -23,6 +23,16 @@ async function submitData() {
         const soulUrge = calculateSoulUrge(name);
         const expression = calculateExpression(name);
         const birthday = calculateBirthdayNumber(dob);
+        // ======================
+        // 4 Đỉnh Cao
+        // ======================
+        const pinnacles = calculatePinnacles(dob);
+        
+        // ======================
+        // Ma trận & Mũi tên
+        // ======================
+        const matrix = buildMatrix(dob);
+        const arrows = calculateArrows(matrix);
 
         // Lấy ý nghĩa con số chủ đạo
         const lifePathMeaning = getLifePathMeaning(lifePath.final);
@@ -35,7 +45,11 @@ async function submitData() {
             soulUrge,
             expression,
             birthday,
-            lifePathMeaning
+            lifePathMeaning,
+            // ➕ thêm mới
+            pinnacles,
+            matrix,
+            arrows
         });
 
     } catch (error) {
@@ -65,6 +79,10 @@ function renderNumerologyResult(data) {
             ${renderUserInfo(data.name, data.dob)}
 
             ${renderNumbersGrid(data)}
+
+            ${renderPinnacles(data.pinnacles)}
+
+            ${renderArrows(data.arrows)}
 
         </div>
     `;
@@ -157,6 +175,63 @@ function renderMainNumber(meaning) {
             <p class="text-5xl font-bold">
                 ${meaning.title}
             </p>
+        </div>
+    `;
+}
+
+// ======================
+// THÊM UI HIỂN THỊ 4 ĐỈNH CAO
+// ======================
+function renderPinnacles(p) {
+    return `
+        <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-5 mb-6">
+            <h3 class="text-xl font-bold text-indigo-700 mb-3">
+                🔺 4 Đỉnh Cao
+            </h3>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                <div class="bg-white p-3 rounded-xl shadow">
+                    <p>Đỉnh 1</p>
+                    <strong>${p.p1}</strong>
+                </div>
+                <div class="bg-white p-3 rounded-xl shadow">
+                    <p>Đỉnh 2</p>
+                    <strong>${p.p2}</strong>
+                </div>
+                <div class="bg-white p-3 rounded-xl shadow">
+                    <p>Đỉnh 3</p>
+                    <strong>${p.p3}</strong>
+                </div>
+                <div class="bg-white p-3 rounded-xl shadow">
+                    <p>Đỉnh 4</p>
+                    <strong>${p.p4}</strong>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// ======================
+// HIỂN THỊ MŨI TÊN
+// ======================
+function renderArrows(arrows) {
+    return `
+        <div class="bg-green-50 border border-green-200 rounded-2xl p-5 mb-6">
+
+            <h3 class="text-xl font-bold text-green-700 mb-3">
+                ➜ Mũi Tên Nhân Số Học
+            </h3>
+
+            <p class="text-gray-700">
+                <strong>Mũi tên mạnh:</strong><br>
+                ${arrows.strong.length ? arrows.strong.join(", ") : "Không có"}
+            </p>
+
+            <p class="text-gray-700 mt-3">
+                <strong>Mũi tên trống:</strong><br>
+                ${arrows.missing.join(", ")}
+            </p>
+
         </div>
     `;
 }
