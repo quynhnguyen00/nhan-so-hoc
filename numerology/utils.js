@@ -1,4 +1,6 @@
-// Hàm rút gọn số
+// ======================
+// Hàm rút gọn một số
+// ======================
 function reduceNumber(number, masterNumbers = [11, 22, 33]) {
     while (number > 9 && !masterNumbers.includes(number)) {
         number = number
