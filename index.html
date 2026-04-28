@@ -50,18 +50,12 @@
                     </label>
                 
                     <input
-                        id="dob"
-                        name="dob"
                         type="text"
-                        inputmode="numeric"
-                        autocomplete="bday"
-                        placeholder="VD: 12/09/1989"
+                        id="dob"
+                        placeholder="DD/MM/YYYY"
                         maxlength="10"
-                        required
-                        class="w-full px-5 py-4 text-lg border-2 border-purple-200 rounded-2xl
-                               focus:border-purple-500 focus:ring-4 focus:ring-purple-200
-                               outline-none transition duration-300"
-                    >
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition"
+                    />
                 </div>
 
                 <!-- Nút tính toán -->
@@ -89,36 +83,6 @@
 
         </div>
     </div>
-
-    <!-- Tự động thêm dấu / -->
-    <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const dobInput = document.getElementById("dob");
-    
-        dobInput.addEventListener("input", function (e) {
-            // Chỉ giữ lại số
-            let value = e.target.value.replace(/\D/g, "");
-    
-            // Giới hạn 8 ký tự (ddmmyyyy)
-            value = value.substring(0, 8);
-    
-            // Tự động thêm dấu /
-            if (value.length >= 5) {
-                value = value.replace(
-                    /^(\d{2})(\d{2})(\d{0,4})$/,
-                    "$1/$2/$3"
-                );
-            } else if (value.length >= 3) {
-                value = value.replace(
-                    /^(\d{2})(\d{0,2})$/,
-                    "$1/$2"
-                );
-            }
-    
-            e.target.value = value;
-        });
-    });
-    </script>
 
     <!-- Scripts -->
     <script src="numerology/utils.js"></script>
